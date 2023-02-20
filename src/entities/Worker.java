@@ -1,57 +1,84 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entities;
 
-/**
- *
- * @author rivaldor
- */
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class Worker {
 
-    private String name;
-    private WorkerLevel level;
-    private Double baseSalary;
+	private String name;
+	private WorkerLevel level;
+	private Double baseSalary;
 
-    public Worker() {
-    }
+	private Department department;
+	private List<HourContract> contracts = new ArrayList<>();
 
-    public Worker(String name, WorkerLevel level, Double baseSalary) {
-        this.name = name;
-        this.level = level;
-        this.baseSalary = baseSalary;
-    }
+	public Worker() {
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Worker(String name, WorkerLevel level, Double baseSalary, Department department) {
+		this.name = name;
+		this.level = level;
+		this.baseSalary = baseSalary;
+		this.department = department;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public WorkerLevel getLevel() {
-        return level;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setLevel(WorkerLevel level) {
-        this.level = level;
-    }
+	public WorkerLevel getLevel() {
+		return level;
+	}
 
-    public Double getBaseSalary() {
-        return baseSalary;
-    }
+	public void setLevel(WorkerLevel level) {
+		this.level = level;
+	}
 
-    public void addContract(HourContract contract) {
+	public Double getBaseSalary() {
+		return baseSalary;
+	}
 
-    }
+	public void setBaseSalary(Double baseSalary) {
+		this.baseSalary = baseSalary;
+	}
 
-    public void removeContract(HourContract contract) {
+	public Department getDepartment() {
+		return department;
+	}
 
-    }
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
 
-    public Double income(Integer year, Integer month) {
-        return null;
-    }
+	public List<HourContract> getContracts() {
+		return contracts;
+	}
+
+	public void addContract(HourContract contract) {
+		contracts.add(contract);
+	}
+
+	public void removeContract(HourContract contract) {
+		contracts.remove(contract);
+	}
+
+	// Calcular a renda baseada no mês do contrato
+	public Double income(Integer year, Integer month) {
+		double sum = baseSalary;
+		Calendar ca1 = Calendar.getInstance();
+		for (HourContract c : contracts) {
+			ca1.setTime(c.getDate());
+			int c_year = ca1.get(Calendar.YEAR);
+			int c_month = 1 + ca1.get(Calendar.MONTH);// Mês do calendar começa com 0;
+			if (year == c_year && month == c_month) {
+				sum += c.totalValue();
+			}
+		}
+		return sum;
+	}
 }
